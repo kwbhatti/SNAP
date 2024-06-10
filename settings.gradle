@@ -1,0 +1,1 @@
+include  'aemcore', 'chip_cms', 'chip_reference', 'chip_services', 'webtools', 'examples', 'common','openexplorer', 'globalsites', 'cup', 'auth0','yourshot'

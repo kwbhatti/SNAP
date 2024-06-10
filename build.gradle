@@ -1,0 +1,269 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		jcenter()
+		maven{ url 'http://repository.jboss.org/maven2/' }
+	}
+	dependencies {
+		classpath "net.serenity-bdd:serenity-gradle-plugin:1.9.6",
+				'org.codehaus.gpars:gpars:1.2.1',
+				'net.saliman:gradle-properties-plugin:1.4.6'
+	}
+}
+
+
+
+import groovyx.gpars.GParsPool
+import java.text.SimpleDateFormat
+
+
+allprojects {
+
+	repositories {
+		mavenLocal()
+		maven{ url 'https://repo.maven.apache.org/maven2/' }
+		jcenter()
+	}
+
+	apply plugin: 'groovy'
+	apply plugin: 'eclipse'
+	apply plugin: 'java'
+	apply plugin: 'net.serenity-bdd.aggregator'
+	apply plugin: 'net.saliman.properties'
+
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+
+	dependencies {
+		compile 'org.slf4j:slf4j-api:1.7.7'
+		compile 'ch.qos.logback:logback-classic:1.2.3'
+		compile 'org.hamcrest:hamcrest-core:1.3'
+		compile 'org.hamcrest:hamcrest-library:1.3'
+		compile 'net.serenity-bdd:serenity-core:1.9.6'
+		compile "net.serenity-bdd:serenity-screenplay:1.9.6"
+		compile "net.serenity-bdd:serenity-cucumber:1.9.7"
+		compile 'junit:junit:4.12'
+		compile 'org.assertj:assertj-core:3.8.0'
+		compile 'com.saucelabs:saucerest:1.0.35'
+		compile 'com.applitools:eyes-selenium-java3:3.29'
+		compile "net.serenity-bdd:serenity-rest-assured:1.9.6"
+		compile "net.serenity-bdd:serenity-junit:1.9.6"
+		compile 'io.rest-assured:json-schema-validator:3.0.7'
+		compile group: 'org.json', name: 'json', version: '20180130'
+		compile 'org.jboss.aerogear:aerogear-otp-java:1.0.0'
+		compile 'net.lightbody.bmp:browsermob-core:2.1.5'
+	}
+
+
+	ext {
+		numberOfParallelJobs = 10
+		SNAP_PROPERTY_LIST = [
+			"env",
+			"tags",
+			"cucumber.options",
+			"webdriver.driver",
+			"webdriver.base.url",
+			"saucelabs.url",
+			"saucelabs.access.key",
+			"saucelabs.user.id",
+			"saucelabs.screenResolution",
+			"saucelabs.target.platform",
+			"snap.applitools.key",
+			"snap.applitools.url",
+			"snap.applitools.screensize",
+			"snap.applitools.matchlevel",
+			"CORE_ADMIN_USER",
+			"CORE_ADMIN_PWD",
+			"snap.core.admin.user",
+			"snap.core.admin.passwd",
+			"snap.parallel.number",
+			"snap.screensize",
+			"webdrivr.driver",
+			"snap.api.key.invalid",
+			"snap.api.key.valid",
+			"snap.api.key.valid2",
+			"CHIP_CMS_ADMIN_USER",
+			"CHIP_CMS_ADMIN_PASS",
+			"CHIP_CMS_ADMIN_TOKEN",
+			"chip.reference.staging.header.key",
+			"chip.reference.staging.header.value"
+		]
+		projectName = ""
+	}
+}
+
+
+def processTagsWithFile(File tmpFile, String tagExpression) {
+	def rtnVal = false
+
+	String searchString = ""
+
+	if(tagExpression.trim().indexOf('@')==0) {
+		searchString = tagExpression
+	} else {
+		searchString = "@${tagExpression}"
+	}
+	
+	if( tmpFile.text.indexOf(searchString) > 0) {
+		rtnVal = true
+	} 
+
+	return rtnVal
+}
+
+
+def systemPropExist(propName) {
+	def rtnVal = false
+
+	if(  System.getProperties().containsKey(propName) ) {
+		rtnVal = true
+	}
+
+	return rtnVal
+}
+
+
+def getBatchID() {
+	def date = new Date()
+	def sdf = new SimpleDateFormat("yyyyMMdd")
+	return System.getProperties().getAt('env').toString().trim().toUpperCase() + "-" +  sdf.format(date)
+}
+
+
+def runCucumberTests(testProperties, tag, pName) {
+	def features = fileTree(dir: "${project.rootDir}/${pName}/src/test/resources/com/natgeo/${pName}/").include '**/*.feature'
+
+	def runTimeClasspath = project(":" + pName).sourceSets.main.runtimeClasspath.asPath
+	def outputClasspath = project(":" + pName).sourceSets.main.output.asPath
+	def testClasspath = project(":" + pName).sourceSets.test.output.asPath
+
+	def featureFilesList = []
+	features.each { File fileB ->
+		if ( processTagsWithFile(fileB,tag ) ) {
+			featureFilesList.add(fileB)
+		}
+	}
+
+
+	GParsPool.withPool(numberOfParallelJobs) {
+		featureFilesList.eachParallel { File file ->
+			exec {
+				executable "sh"
+				args "-c", "mkdir -p ${project.rootDir}/${pName}/target/cucumber " +
+						"&& java ${testProperties} " +
+						"-cp ${runTimeClasspath}:${outputClasspath}:${testClasspath} " +
+						"net.serenitybdd.cucumber.cli.Main  " +
+						"--glue classpath:com.natgeo.${pName} " +
+						"${file.path} " +
+						"--plugin json:${project.rootDir}/${pName}/target/cucumber/${file.name}.json " +
+						"--tags ${tag}"
+			}
+		}
+	}
+}
+
+
+/**
+ *
+ *  Checks to make sure the required option is specfied
+ *		Required Option(s): env
+ *
+ **/
+def checkRequiredOptions() {
+	if( !systemPropExist('env') ) {
+		throw new GradleException('Requires the -Denv option i.e -Denv=stagiong')
+	} else {
+		def propFile =  "${project.rootDir}/properties/" + System.getProperties().getAt("env") + ".properties"
+		if( !file(propFile).exists() ) {
+			throw new GradleException("The property file does not exist:\n"+ propFile)
+		}
+	}
+
+	SNAP_PROPERTY_LIST.each { propertyName ->
+		if( project.findProperty(propertyName) != null ) {
+			def tmpVal =  project.findProperty(propertyName)
+			throw new GradleException("This project does not accept property options like -P${propertyName}=${tmpVal}\nPlease use java options like -D${propertyName}=${tmpVal}")
+		}
+	}
+}
+
+project(':common') { aggregate.enabled = false }
+
+subprojects {
+
+	eclipse.classpath.file.whenMerged {
+		//entries.removeAll { it.kind == 'output' }
+		
+	}
+	
+	//eclipse.classpath.defaultOutputDir == "/$eclipse.project.name/bin2"
+
+	task runInParallel {
+		dependsOn assemble, compileTestJava
+
+		doFirst() {  checkRequiredOptions()  }
+
+
+		doLast {
+
+			def testProperties = "-Dproperties=${project.rootDir}/properties/${System.getProperties().getAt('env')}.properties"
+			//testProperties = testProperties + " -DjvmOpts='-Xms100m -Xmx2g'"
+
+
+			SNAP_PROPERTY_LIST.each { propertyName ->
+				if( systemPropExist(propertyName)  && !propertyName.contains("snap.parallel.number") ) {
+					testProperties = testProperties + " -D${propertyName}=" + System.getProperties().getAt(propertyName)
+				} else if(systemPropExist("snap.parallel.number")) {
+					numberOfParallelJobs = System.getProperties().getAt("snap.parallel.number").toInteger()
+				}
+
+			}
+			testProperties = testProperties +  "  -DBATCHID=" + getBatchID()
+
+
+			def tags = " "
+			if (systemPropExist("tag")){
+				tags = "@" + System.getProperties().getAt("tag")
+			} else if(systemPropExist("tags") != null){
+				tags = "@" + System.getProperties().getAt("tags")
+			} else {
+				tags = "~@pending"
+			}
+
+
+			runCucumberTests(testProperties, tags, ext.projectName)
+		}
+	}
+
+
+	clean.doFirst { delete  "${project.rootDir}/target/" }
+
+	test () {
+		doFirst() {  checkRequiredOptions()  }
+
+
+		options {
+			//env should always exist
+			systemProperty 'properties', "${project.rootDir}/properties/" + System.getProperties().getAt("env") + ".properties"
+			//systemProperty 'jvmOpts', "'-Xms100m -Xmx2g'"
+			systemProperty 'BATCHID', getBatchID()
+
+			SNAP_PROPERTY_LIST.each { propertyName ->
+				if( systemPropExist(propertyName) ) {
+					systemProperty propertyName, System.getProperties().getAt(propertyName)
+				}
+			}
+		}
+
+		testLogging.showStandardStreams = true
+		systemProperties System.getProperties()
+	}
+
+
+
+	gradle.startParameter.continueOnFailure = true
+}
+
+test.finalizedBy(aggregate)

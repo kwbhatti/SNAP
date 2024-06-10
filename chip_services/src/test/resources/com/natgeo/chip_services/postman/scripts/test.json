@@ -1,0 +1,2118 @@
+{
+	"info": {
+		"name": "CHIP APIs",
+		"_postman_id": "ee84ae71-6fb5-16bd-409d-d8eb3efcf294",
+		"description": "Tests endpoints for CHIP including: \nConfig\nLayout\nAggregation\nComponent",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "LAYOUT API",
+			"description": "",
+			"item": [
+				{
+					"name": "LAYOUT API HEALTH",
+					"description": "",
+					"item": [
+						{
+							"name": "Layout Health Pass",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var layoutHelpers = eval(globals.layoutHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"layoutHelpers.layoutHealthPassSchema();",
+											"var schema = pm.variables.get(\"layoutHealthPassSchema\");",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(200);",
+											"mainHelpers.schemaValidationTest(\"Layout Health Pass\",responseJson, schema);",
+											"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+											"//TEARDOWN",
+											"mainHelpers.unsetApiKey();",
+											""
+										],
+										"id": "37de03ec-460b-4b46-8ef5-121766b50a81",
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//SETUP",
+											"console.log(\"EXECUTING: Layout Health Pass\");",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"mainHelpers.setApiKey();"
+										],
+										"id": "123be870-223a-4d32-83d2-6247b82f9c1b",
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "apikey",
+										"value": "{{apikey}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/layout/health",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"layout",
+										"health"
+									]
+								},
+								"description": "Checking the Health of the Layout API"
+							},
+							"response": []
+						},
+						{
+							"name": "Layout Health Fail-noApiKey",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var layoutHelpers = eval(globals.layoutHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"layoutHelpers.layoutHealthFailNoAPISchema();",
+											"var schema = pm.variables.get(\"layoutHealthFailNoAPISchema\");",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(401);",
+											"mainHelpers.schemaValidationTest(\"Layout Health Fail-noApikey\",responseJson, schema);",
+											"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+											"//TEARDOWN",
+											""
+										],
+										"id": "6b5a9462-37f8-4966-b4de-39cdff2e05b3",
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"EXECUTING: Layout Health Fail - no API key\");"
+										],
+										"id": "71dc7374-c605-4091-89c2-32a6ed3aeb94",
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/layout/health",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"layout",
+										"health"
+									]
+								},
+								"description": "Checking the Health of the Layout API"
+							},
+							"response": []
+						},
+						{
+							"name": "Layout Health Fail-incorrectApikey",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "cd523d64-dc23-4c4d-8fc1-63f431048f9c",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(\"EXECUTING: Layout Health Fail-incorrectApiKey\");",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"mainHelpers.setIncorrectApiKey();"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "79443503-1a32-457c-8f21-20e025edf34d",
+										"type": "text/javascript",
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var layoutHelpers = eval(globals.layoutHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(401);",
+											"//TEARDOWN",
+											"mainHelpers.unsetApiKey();",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "apikey",
+										"value": "{{apikey}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/layout/health",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"layout",
+										"health"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.log(\"EXECUTING: Layout Health APIs Sub-Folder\");",
+									"",
+									"postman.setGlobalVariable(\"layoutHelpers\", function layoutHelpers() {",
+									"    let layoutHelpers = {};",
+									" ",
+									"    layoutHelpers.layoutBaseErrorSchema = function layoutBaseErrorSchema() {",
+									"        const layoutBaseErrorSchema = ",
+									"        {",
+									"            \"type\": \"object\",",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"required\": [\"message\"],",
+									"            \"properties\": {",
+									"              \"message\": {",
+									"                \"type\": \"string\"",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"layoutBaseErrorSchema\", layoutBaseErrorSchema);",
+									"    }",
+									"    ",
+									"    layoutHelpers.layoutHealthPassSchema = function layoutHealthPassSchema() {",
+									"        const layoutHealthPassSchema = ",
+									"        {",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"required\": [\"message\", \"code\", \"type\"],",
+									"                \"properties\": {",
+									"                    \"message\": {",
+									"                    \"type\": \"string\"",
+									"                    },",
+									"                    \"code\": {",
+									"                    \"type\": \"integer\"",
+									"                    },",
+									"                    \"type\": {",
+									"                    \"type\": \"string\"",
+									"                    }",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"layoutHealthPassSchema\", layoutHealthPassSchema);",
+									"    }",
+									"",
+									"    layoutHelpers.layoutHealthFailNoAPISchema = function layoutHealthFailNoAPISchema() {",
+									"        const layoutHealthFailNoAPISchema = ",
+									"        {",
+									"            \"type\": \"object\",",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"properties\": {",
+									"                    \"fault\": {",
+									"                        \"type\": \"object\",",
+									"                        \"properties\": {",
+									"                            \"faultstring\": {",
+									"                            \"type\": \"string\"",
+									"                            },",
+									"                            \"detail\": {",
+									"                            \"type\": \"object\",",
+									"                            \"properties\": {",
+									"                            \"errorcode\": {",
+									"                            \"type\": \"string\"",
+									"                            }",
+									"                            }",
+									"                        }",
+									"                    }",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"layoutHealthFailNoAPISchema\", layoutHealthFailNoAPISchema);",
+									"    }",
+									"",
+									"",
+									"    return layoutHelpers;",
+									"} + '; layoutHelpers();');"
+								],
+								"id": "4efb883d-90d6-46df-9e51-2d6f24a6f193",
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"id": "30edbd46-e3ca-4d2c-88d0-d1c6aba37c42",
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "LAYOUT API LAYOUTS",
+					"description": "Layout Layouts LayoutId Pass\nneeds changes:\n1. does not accept unless / is added after the layout_id\n2. should not be passed like 1234 instead , ?layout_id={{layout_id}}\n3. 1234 which is working is an invalid layout_id, instead should be ABCD-123456",
+					"item": [
+						{
+							"name": "LAYOUT LAYOUTS GET ALL",
+							"description": "",
+							"item": [
+								{
+									"name": "Layout Layouts Pass",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "e4775095-0abf-4c3c-b5af-4bac325fd072",
+												"type": "text/javascript",
+												"exec": [
+													"//SETUP",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"var layoutHelpers = eval(globals.layoutHelpers);",
+													"var response = pm.response;",
+													"var responseJson = response.json();",
+													"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+													"var responseBodySize = mainHelpers.stringSize(responseBody);",
+													"layoutHelpers.layoutLayoutsAllSchema();",
+													"var schema = pm.variables.get(\"layoutLayoutsAllSchema\");",
+													"//TESTS",
+													"mainHelpers.verifyStatusCode(200);",
+													"mainHelpers.schemaValidationTest(\"Layout Layouts Pass\",responseJson, schema);",
+													"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+													"//TEARDOWN",
+													"mainHelpers.unsetApiKey();",
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "9a89bf66-cc1d-4130-942a-835cead5f0cb",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"EXECUTING: Layout Layouts Pass\");",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"mainHelpers.setApiKey();",
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "apikey",
+												"value": "{{apikey}}"
+											}
+										],
+										"body": {},
+										"url": {
+											"raw": "{{baseURL}}/layout/layouts",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"layout",
+												"layouts"
+											]
+										},
+										"description": "Checking the Health of the Layout API"
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"EXECUTING: Layout Layouts get all Sub-Folder\")"
+										],
+										"id": "c6ee19bb-8589-46fe-9e25-7ec1b9454acb",
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "LAYOUT LAYOUTS WITH ID PARAMETER",
+							"description": "",
+							"item": [
+								{
+									"name": "Layout Layouts LayoutId Pass 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "efd45a84-5e27-4f00-9b9c-75c5522f55fd",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"needs modifications per new reqs/bug, layout id needs to be changed and the value for the layout compare\");",
+													"//SETUP",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"var layoutHelpers = eval(globals.layoutHelpers);",
+													"var response = pm.response;",
+													"var responseJson = response.json();",
+													"var reqLayout_id = pm.variables.get(\"layout_id\");",
+													"var resLayout_id = responseJson.layout_id;",
+													"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+													"var responseBodySize = mainHelpers.stringSize(responseBody);",
+													"layoutHelpers.layoutLayoutsSchema();",
+													"var schema = pm.variables.get(\"layoutLayoutsSchema\");",
+													"//TESTS",
+													"mainHelpers.verifyStatusCode(200);",
+													"mainHelpers.schemaValidationTest(\"Layout Layout with ID Pass 1\",responseJson, schema);",
+													"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+													"mainHelpers.compareValues(\"The response layout_id matches the request layout_id\", \"ABCD-123456\", resLayout_id);",
+													"//TEARDOWN",
+													"mainHelpers.unsetApiKey();",
+													"",
+													"",
+													"",
+													"",
+													"",
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "abe02cbb-9241-420c-ad62-28c69e7abf78",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"EXECUTING: Layout Layouts LayoutId Pass 1\");",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"mainHelpers.setApiKey();",
+													"",
+													"var env = pm.variables.get(\"env\");",
+													"if (env === \"dev\"){",
+													"    pm.variables.set(\"layout_id\", \"1234\");",
+													"}else if (env === \"qa\"){",
+													"    pm.variables.set(\"layout_id\", \"1234\");",
+													"}"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "apikey",
+												"value": "{{apikey}}"
+											}
+										],
+										"body": {},
+										"url": {
+											"raw": "{{baseURL}}/layout/layouts/{{layout_id}}/",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"layout",
+												"layouts",
+												"{{layout_id}}",
+												""
+											]
+										},
+										"description": "Checking the Health of the Layout API"
+									},
+									"response": []
+								},
+								{
+									"name": "Layout Layouts LayoutId Fail-Invalid LayoutId",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "0b694f9f-2267-40b4-ab9e-25f69d7857c1",
+												"type": "text/javascript",
+												"exec": [
+													"//SETUP",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"var layoutHelpers = eval(globals.layoutHelpers);",
+													"var response = pm.response;",
+													"var responseJson = response.json();",
+													"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+													"var responseBodySize = mainHelpers.stringSize(responseBody);",
+													"layoutHelpers.layoutBaseErrorSchema();",
+													"var schema = pm.variables.get(\"layoutBaseErrorSchema\");",
+													"//TESTS",
+													"mainHelpers.verifyStatusCode(500);",
+													"mainHelpers.schemaValidationTest(\"Layout Layout Fail\",responseJson, schema);",
+													"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+													"//TEARDOWN",
+													"mainHelpers.unsetApiKey();",
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "35ed2034-2db6-45bc-8f2a-747ed2dbaf97",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"EXECUTING: Layout Layouts LayoutId Fail-Invalid LayoutId\");",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"mainHelpers.setApiKey();"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "apikey",
+												"value": "{{apikey}}"
+											}
+										],
+										"body": {},
+										"url": {
+											"raw": "{{baseURL}}/layout/layouts/AAADDD999",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"layout",
+												"layouts",
+												"AAADDD999"
+											]
+										},
+										"description": "Checking the Health of the Layout API"
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"EXECUTING: Layout Layouts with Id Parameter Sub-Folder\")",
+											""
+										],
+										"id": "da2f17b9-6c18-4aca-8837-c394051d5e42",
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"id": "a4f84124-6721-41f8-b2a0-f3993014ebc3",
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "LAYOUT LAYOUTS WITH URI AND DOMAIN NAME PARAMETER",
+							"description": "",
+							"item": [
+								{
+									"name": "Layout Layouts LayoutParam Pass 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "6e40966d-7500-4522-aabd-2eb5dc12b19a",
+												"type": "text/javascript",
+												"exec": [
+													"//SETUP",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"var layoutHelpers = eval(globals.layoutHelpers);",
+													"var response = pm.response;",
+													"var responseJson = response.json();",
+													"var reqUri = pm.variables.get(\"uri\");",
+													"var reqDomain_name = pm.variables.get(\"domain_name\");",
+													"var resUri = responseJson.uri;",
+													"var resDomain_name = responseJson.domain_name;",
+													"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+													"var responseBodySize = mainHelpers.stringSize(responseBody);",
+													"layoutHelpers.layoutLayoutsSchema();",
+													"var schema = pm.variables.get(\"layoutLayoutsSchema\");",
+													"//TESTS",
+													"mainHelpers.verifyStatusCode(200);",
+													"mainHelpers.schemaValidationTest(\"Layout Layout with Param 1\",responseJson, schema);",
+													"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+													"tests[\"The response uri matches the request uri\"] = reqUri == resUri;",
+													"tests[\"The response domain_name matches the request domain_name\"] = reqDomain_name == resDomain_name;",
+													"//TEARDOWN",
+													"mainHelpers.unsetApiKey();",
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "0b6c94a1-8479-4d0b-a661-9ab398fd32e4",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"EXECUTING: Layout Layouts LayoutParam Pass 1\");",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"mainHelpers.setApiKey();",
+													"",
+													"var env = pm.variables.get(\"env\");",
+													"if (env === \"dev\"){",
+													"    pm.variables.set(\"uri\", \"/about/\");",
+													"    pm.variables.set(\"domain_name\", \"www.nationalgeographic.co.uk\");",
+													"}else if (env === \"qa\"){",
+													"    pm.variables.set(\"uri\", \"/about/\");",
+													"    pm.variables.set(\"domain_name\", \"www.nationalgeographic.co.uk\");",
+													"}"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "apikey",
+												"value": "{{apikey}}"
+											}
+										],
+										"body": {},
+										"url": {
+											"raw": "{{baseURL}}/layout/layouts/?uri={{uri}}&domain_name={{domain_name}}",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"layout",
+												"layouts",
+												""
+											],
+											"query": [
+												{
+													"key": "uri",
+													"value": "{{uri}}",
+													"equals": true
+												},
+												{
+													"key": "domain_name",
+													"value": "{{domain_name}}",
+													"equals": true
+												}
+											]
+										},
+										"description": "Checking the Health of the Layout API"
+									},
+									"response": []
+								},
+								{
+									"name": "Layout Layouts LayoutParam Fail-Invalid Param",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "ae6e5cd0-062f-4cfa-9726-2c5885c3b980",
+												"type": "text/javascript",
+												"exec": [
+													"//SETUP",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"var layoutHelpers = eval(globals.layoutHelpers);",
+													"var response = pm.response;",
+													"var responseJson = response.json();",
+													"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+													"var responseBodySize = mainHelpers.stringSize(responseBody);",
+													"layoutHelpers.layoutBaseErrorSchema();",
+													"var schema = pm.variables.get(\"layoutBaseErrorSchema\");",
+													"//TESTS",
+													"mainHelpers.verifyStatusCode(500);",
+													"mainHelpers.schemaValidationTest(\"Layout Layout Fail\",responseJson, schema);",
+													"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+													"//TEARDOWN",
+													"mainHelpers.unsetApiKey();",
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "8c45bc53-7f20-4f4b-ba8c-d726816b4731",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"EXECUTING: Layout LayoutsParam Fail-Invalid Param\");",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"mainHelpers.setApiKey();"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "apikey",
+												"value": "{{apikey}}"
+											}
+										],
+										"body": {},
+										"url": {
+											"raw": "{{baseURL}}/layout/layouts/?uri=/invalid/&domain_name=www.invalid.com",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"layout",
+												"layouts",
+												""
+											],
+											"query": [
+												{
+													"key": "uri",
+													"value": "/invalid/",
+													"equals": true
+												},
+												{
+													"key": "domain_name",
+													"value": "www.invalid.com",
+													"equals": true
+												}
+											]
+										},
+										"description": "Checking the Health of the Layout API"
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"console.log(\"EXECUTING: Layout Layouts with URI and domain_name Parameters Sub-Folder\");"
+										],
+										"id": "c1e50651-b69d-4947-92eb-eb09608d7d5c",
+										"type": "text/javascript"
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "70b04ce9-aa5a-4aac-9904-35872fa61cf3",
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"EXECUTING: Layout Layouts APIs Sub-Folder\");",
+									"",
+									"postman.setGlobalVariable(\"layoutHelpers\", function layoutHelpers() {",
+									"    let layoutHelpers = {};",
+									"    ",
+									"    layoutHelpers.layoutBaseErrorSchema = function layoutBaseErrorSchema() {",
+									"        const layoutBaseErrorSchema = ",
+									"        {",
+									"            \"type\": \"object\",",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"required\": [\"message\"],",
+									"            \"properties\": {",
+									"              \"message\": {",
+									"                \"type\": \"string\"",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"layoutBaseErrorSchema\", layoutBaseErrorSchema);",
+									"    }",
+									"    ",
+									"    layoutHelpers.layoutLayoutsSchema = function layoutLayoutsSchema() {",
+									"        const layoutLayoutsSchema = ",
+									"        {",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"type\": \"object\",",
+									"            \"required\": [",
+									"                \"uri\",",
+									"                \"site_id\",",
+									"                \"domain_name\",",
+									"                \"regions\"",
+									"            ],",
+									"            \"properties\": {",
+									"                \"uri\": {",
+									"                \"type\": \"string\"",
+									"                },",
+									"                \"layout_id\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"domain_name\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"site_id\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"layout_type\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"regions\": {",
+									"                    \"allOf\": [",
+									"                        { ",
+									"                            \"$ref\": \"#/definitions/regions\" ",
+									"                        }",
+									"                    ]",
+									"                }",
+									"            },",
+									"            \"definitions\": {",
+									"                \"Component\": {",
+									"                    \"type\": \"object\",",
+									"                    \"required\": [\"component\"],",
+									"                    \"properties\": {",
+									"                        \"component\": { ",
+									"                            \"type\": \"string\" ",
+									"                            },",
+									"                            \"key\": { ",
+									"                                \"type\": \"string\" ",
+									"                            },",
+									"                            \"config\": {     ",
+									"                                \"type\": \"object\"",
+									"                            }",
+									"                        } ",
+									"                    },",
+									"                \"Components\": {",
+									"                    \"type\": \"array\",",
+									"                    \"items\": {",
+									"                        \"allOf\": [",
+									"                            {",
+									"                                \"$ref\": \"#/definitions/Component\" ",
+									"                            }",
+									"                        ]",
+									"                    }",
+									"                },",
+									"                \"regions\": {",
+									"                    \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                        \"main\": {",
+									"                            \"allOf\": [",
+									"                                { ",
+									"                                    \"$ref\": \"#/definitions/Components\" ",
+									"                                    }",
+									"                            ]",
+									"                        },",
+									"                        \"right\": {",
+									"                            \"allOf\": [",
+									"                                { ",
+									"                                    \"$ref\": \"#/definitions/Components\" ",
+									"                                }",
+									"                            ]",
+									"                        }",
+									"                    }",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"layoutLayoutsSchema\", layoutLayoutsSchema);",
+									"    }",
+									"",
+									"layoutHelpers.layoutLayoutsAllSchema = function layoutLayoutsAllSchema() {",
+									"        const layoutLayoutsAllSchema = ",
+									"        {",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"required\": [",
+									"                    \"uri\",",
+									"                    \"site_id\",",
+									"                    \"domain_name\",",
+									"                    \"regions\"",
+									"                ],",
+									"                \"properties\": {",
+									"                    \"uri\": {",
+									"                    \"type\": \"string\"",
+									"                    },",
+									"                    \"layout_id\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"domain_name\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"site_id\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"layout_type\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"regions\": {",
+									"                        \"allOf\": [",
+									"                            { ",
+									"                                \"$ref\": \"#/definitions/regions\" ",
+									"                            }",
+									"                        ]",
+									"                    }",
+									"                }",
+									"            },",
+									"            \"definitions\": {",
+									"                \"Component\": {",
+									"                    \"type\": \"object\",",
+									"                    \"required\": [\"component\"],",
+									"                    \"properties\": {",
+									"                        \"component\": { ",
+									"                            \"type\": \"string\" ",
+									"                            },",
+									"                            \"key\": { ",
+									"                                \"type\": \"string\" ",
+									"                            },",
+									"                            \"config\": {     ",
+									"                                \"type\": \"object\"",
+									"                            }",
+									"                        } ",
+									"                    },",
+									"                \"Components\": {",
+									"                    \"type\": \"array\",",
+									"                    \"items\": {",
+									"                        \"allOf\": [",
+									"                            {",
+									"                                \"$ref\": \"#/definitions/Component\" ",
+									"                            }",
+									"                        ]",
+									"                    }",
+									"                },",
+									"                \"regions\": {",
+									"                    \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                        \"main\": {",
+									"                            \"allOf\": [",
+									"                                { ",
+									"                                    \"$ref\": \"#/definitions/Components\" ",
+									"                                    }",
+									"                            ]",
+									"                        },",
+									"                        \"right\": {",
+									"                            \"allOf\": [",
+									"                                { ",
+									"                                    \"$ref\": \"#/definitions/Components\" ",
+									"                                }",
+									"                            ]",
+									"                        }",
+									"                    }",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"layoutLayoutsAllSchema\", layoutLayoutsAllSchema);",
+									"    }",
+									"",
+									"",
+									"",
+									"    return layoutHelpers;",
+									"} + '; layoutHelpers();');"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "cd192177-7826-4a3b-8ab3-34bcb2ff9c55",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"EXECUTING: Layout APIs Folder\");",
+							""
+						],
+						"id": "c2c3b725-b51f-4fb3-aaa3-b69a48652a26",
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"id": "0db2bb2d-81ff-4bb7-aec5-41e829aa9ead",
+						"type": "text/javascript"
+					}
+				}
+			]
+		},
+		{
+			"name": "CONFIG API",
+			"description": "Testing Config API",
+			"item": [
+				{
+					"name": "CONFIG SITES",
+					"description": "",
+					"item": [
+						{
+							"name": "Config Sites Fail-noApiKey",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "ca697e07-a4bc-436a-a4c5-e28d7261c82f",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(\"EXECUTING: Config Sites Fail - no API key\");",
+											"",
+											"var env = pm.variables.get(\"env\");",
+											"if (env === \"dev\"){",
+											"    pm.variables.set(\"domain\", \"www.natgeo.us\");",
+											"}else if (env === \"qa\"){",
+											"    pm.variables.set(\"domain\", \"www.natgeo.us\");",
+											"}"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "15079cf4-ab6b-49a9-90f6-39d41c105e4f",
+										"type": "text/javascript",
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var configHelpers = eval(globals.configHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(401);",
+											"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+											"//TEARDOWN",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/chipconfig/sites/sites?domain={{domain}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"chipconfig",
+										"sites",
+										"sites"
+									],
+									"query": [
+										{
+											"key": "domain",
+											"value": "{{domain}}",
+											"equals": true
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Config Sites Fail-noParameter",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "547a5bca-db32-447c-b26c-c25d96f7b4c1",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(\"EXECUTING: Config Sites Fail - no Parameter\");",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"mainHelpers.setApiKey();"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "cc2e8c67-7627-4f88-80c3-420ee8148eff",
+										"type": "text/javascript",
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var configHelpers = eval(globals.configHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"configHelpers.configBaseErrorSchema();",
+											"var schema = pm.variables.get(\"configBaseErrorSchema\");",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(400);",
+											"mainHelpers.schemaValidationTest(\"Config Sites no Parameter Error\",responseJson, schema);",
+											"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+											"//TEARDOWN",
+											"mainHelpers.unsetApiKey();",
+											"",
+											"",
+											"//configBaseErrorSchema"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "apikey",
+										"value": "{{apikey}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/chipconfig/sites/",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"chipconfig",
+										"sites",
+										""
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Config Sites Pass 1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "317e7a58-612f-43dd-b445-a8011433a39a",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(\"EXECUTING: Config Sites Pass 1\");",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"mainHelpers.setApiKey();",
+											"",
+											"var env = pm.variables.get(\"env\");",
+											"if (env === \"dev\"){",
+											"    pm.variables.set(\"domain\", \"www.natgeo.us\");",
+											"}else if (env === \"qa\"){",
+											"    pm.variables.set(\"domain\", \"www.natgeo.us\");",
+											"}"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "520286c6-c7bd-478a-bfee-8105199c29e4",
+										"type": "text/javascript",
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var configHelpers = eval(globals.configHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var reqDomain = pm.variables.get(\"domain\");",
+											"var resDomain = responseJson.message.domain;",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"configHelpers.configPassSchema();",
+											"var schema = pm.variables.get(\"configPassSchema\");",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(200);",
+											"mainHelpers.schemaValidationTest(\"Config Sites Pass 1\",responseJson, schema);",
+											"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+											"tests[\"The response domain matches the request domain\"] = reqDomain == resDomain;",
+											"//TEARDOWN",
+											"mainHelpers.unsetApiKey();",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "apikey",
+										"value": "{{apikey}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/chipconfig/sites/sites?domain={{domain}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"chipconfig",
+										"sites",
+										"sites"
+									],
+									"query": [
+										{
+											"key": "domain",
+											"value": "{{domain}}",
+											"equals": true
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Config Sites Pass 2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "4a37807c-216e-4161-b1ba-f2e54e4001bb",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(\"EXECUTING: Config Sites Pass 2\");",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"mainHelpers.setApiKey();",
+											"",
+											"var env = pm.variables.get(\"env\");",
+											"if (env === \"dev\"){",
+											"    pm.variables.set(\"domain\", \"www.natgeo.uk\");",
+											"}else if (env === \"qa\"){",
+											"    pm.variables.set(\"domain\", \"www.natgeo.uk\");",
+											"}"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "afb9bac2-b2ba-4da9-aaec-f45d80e31128",
+										"type": "text/javascript",
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var configHelpers = eval(globals.configHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var reqDomain = pm.variables.get(\"domain\");",
+											"var resDomain = responseJson.message.domain;",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"configHelpers.configPassSchema();",
+											"var schema = pm.variables.get(\"configPassSchema\");",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(200);",
+											"mainHelpers.schemaValidationTest(\"Config Sites Pass 2\",responseJson, schema);",
+											"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+											"tests[\"The response domain matches the request domain\"] = reqDomain == resDomain;",
+											"//TEARDOWN",
+											"mainHelpers.unsetApiKey();",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "apikey",
+										"value": "{{apikey}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/chipconfig/sites/sites?domain={{domain}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"chipconfig",
+										"sites",
+										"sites"
+									],
+									"query": [
+										{
+											"key": "domain",
+											"value": "{{domain}}",
+											"equals": true
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "eed2aa7d-f691-4c4d-b645-6807f3aa15ac",
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"EXECUTING: Config Sites Sub-Folder\");",
+									"",
+									"postman.setGlobalVariable(\"configHelpers\", function configHelpers() {",
+									"    let configHelpers = {};",
+									"    ",
+									"    configHelpers.configBaseErrorSchema = function configBaseErrorSchema() {",
+									"        const configBaseErrorSchema = ",
+									"        {",
+									"            \"type\": \"object\",",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"required\": [\"message\"],",
+									"            \"properties\": {",
+									"              \"message\": {",
+									"                \"type\": \"string\"",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"configBaseErrorSchema\", configBaseErrorSchema);",
+									"    }",
+									"    ",
+									"    configHelpers.configPassSchema = function configPassSchema() {",
+									"        const configPassSchema = ",
+									"        {",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"name\": {",
+									"                \"type\": \"string\"",
+									"                },",
+									"                \"nameSpace\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"domain\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"language\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"country\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"channelType\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"contentAPIURL\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"layoutURL\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"auth\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"video\": {",
+									"                    \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                        \"MPX\": {",
+									"                            \"type\": \"object\",",
+									"                            \"properties\": {",
+									"                                \"accounts\": {",
+									"                                    \"type\": \"array\",",
+									"                                    \"items\": {",
+									"                                        \"allOf\": [",
+									"                                            {",
+									"                                                \"$ref\": \"#/definitions/MPXAccount\"",
+									"                                            }",
+									"                                        ]",
+									"                                    }",
+									"                                }",
+									"                            }",
+									"                        }",
+									"                    }",
+									"                },",
+									"                \"social\": {",
+									"                    \"type\": \"array\",",
+									"                    \"items\": {",
+									"                        \"allOf\": [",
+									"                            {",
+									"                                \"$ref\": \"#/definitions/Social\"",
+									"                            }",
+									"                        ]",
+									"                    }",
+									"                },",
+									"                \"ads\": {",
+									"                    \"type\": \"array\",",
+									"                    \"items\": {",
+									"                        \"allOf\": [",
+									"                            {",
+									"                                \"$ref\": \"#/definitions/Ad\"",
+									"                            }",
+									"                        ]",
+									"                    }",
+									"                },",
+									"                \"analytics\": {",
+									"                    \"type\": \"array\",",
+									"                    \"items\": {",
+									"                        \"allOf\": [",
+									"                            {",
+									"                                \"$ref\": \"#/definitions/Analytics\"",
+									"                            }",
+									"                        ]",
+									"                    }",
+									"                }",
+									"            },",
+									"            \"definitions\": {",
+									"                \"Social\": {",
+									"                    \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                        \"name\": { ",
+									"                            \"type\": \"string\" ",
+									"                            },",
+									"                        \"uri\": { ",
+									"                                \"type\": \"string\" ",
+									"                            },",
+									"                        \"key\": {     ",
+									"                                \"type\": \"string\"",
+									"                            }",
+									"                        } ",
+									"                    },",
+									"                \"Ad\": {",
+									"                    \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                        \"name\": { ",
+									"                            \"type\": \"string\" ",
+									"                            }",
+									"                        } ",
+									"                },",
+									"                \"Analytics\": {",
+									"                    \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                        \"name\": {",
+									"                            \"type\": \"string\"",
+									"                        }",
+									"                    }",
+									"                },",
+									"                \"MPXAccount\": {",
+									"                    \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                        \"name\":{",
+									"                            \"type\": \"string\"",
+									"                        },",
+									"                        \"account\": {",
+									"                            \"type\": \"string\"",
+									"                        }",
+									"                    }",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"configPassSchema\", configPassSchema);",
+									"    }",
+									"    ",
+									"",
+									"    return configHelpers;",
+									"} + '; configHelpers();');"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "78fb8112-1a03-408d-9bab-992becb24b27",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e9471b10-7372-47c8-ba32-cc12a79739ce",
+						"type": "text/javascript",
+						"exec": [
+							"console.log(\"EXECUTING: Layout APIs Folder\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "96304912-1e5d-45cd-ae78-9d8c36ae825b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "AGGREGATIOIN API",
+			"description": "",
+			"item": [
+				{
+					"name": "AGGREGATION HEALTH",
+					"description": "",
+					"item": [
+						{
+							"name": "Aggreagation FAil-noApiKey",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "3ac08d9e-acd9-48f8-97ce-6320109e5144",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(\"EXECUTING: Aggregation Health Fail - no API key\");"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "4fab7b45-ab51-4662-9df0-1485cbdeb384",
+										"type": "text/javascript",
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var aggregationHelpers = eval(globals.aggregationHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(401);",
+											"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+											"//TEARDOWN",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/webaggregation/",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"webaggregation",
+										""
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "Aggreagation FAil-incorrectApiKey copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "83e7e8e3-3608-42d3-aa58-2534787f9584",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(\"EXECUTING: Aggregation Health Fail-incorrectApiKey\");",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"mainHelpers.setIncorrectApiKey();"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "6c99bb2f-39b7-49ee-9833-80b105da9594",
+										"type": "text/javascript",
+										"exec": [
+											"//SETUP",
+											"var mainHelpers = eval(globals.mainHelpers);",
+											"var aggregationHelpers = eval(globals.aggregationHelpers);",
+											"var response = pm.response;",
+											"var responseJson = response.json();",
+											"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+											"var responseBodySize = mainHelpers.stringSize(responseBody);",
+											"//TESTS",
+											"mainHelpers.verifyStatusCode(401);",
+											"//TEARDOWN",
+											"mainHelpers.unsetApiKey();",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "apikey",
+										"value": "{{apikey}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{baseURL}}/webaggregation/",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"webaggregation",
+										""
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b132194e-095f-40cf-a6ac-5f8df7cdd297",
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"EXECUTING: Aggregation Health Sub-Folder\");"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7c2813ab-96e7-45ef-b2f9-521c1de4337f",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "AGGREGATION PAGES",
+					"description": "",
+					"item": [
+						{
+							"name": "AGGREGATION PAGES WITH URI PARAMETER",
+							"description": "",
+							"item": [
+								{
+									"name": "Aggregation Pages Param Pass 1",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "b77f553b-78e9-48c7-9e36-27a4db326089",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"EXECUTING: Aggregation Pages Param Pass 1\");",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"mainHelpers.setApiKey();",
+													"",
+													"var env = pm.variables.get(\"env\");",
+													"if (env === \"dev\"){",
+													"    pm.variables.set(\"uri\", \"/about/\");",
+													"}else if (env === \"qa\"){",
+													"    pm.variables.set(\"uri\", \"/about/\");",
+													"}"
+												]
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"id": "a818d347-0661-40b9-9242-754902c741a3",
+												"type": "text/javascript",
+												"exec": [
+													"//SETUP",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"var aggregationHelpers = eval(globals.aggregationHelpers);",
+													"var response = pm.response;",
+													"var responseJson = response.json();",
+													"var reqUri = pm.variables.get(\"uri\");",
+													"var resUri = responseJson.uri;",
+													"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+													"var responseBodySize = mainHelpers.stringSize(responseBody);",
+													"//need to change the schema name",
+													"aggregationHelpers.aggregationPagesSchema();",
+													"var schema = pm.variables.get(\"aggregationPagesSchema\");",
+													"//TESTS",
+													"mainHelpers.verifyStatusCode(200);",
+													"mainHelpers.schemaValidationTest(\"Aggregation Pages with Param 1\",responseJson, schema);",
+													"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+													"tests[\"The response uri matches the request uri\"] = reqUri == resUri;",
+													"//TEARDOWN",
+													"mainHelpers.unsetApiKey();",
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "apikey",
+												"value": "{{apikey}}"
+											}
+										],
+										"body": {},
+										"url": {
+											"raw": "{{baseURL}}/webaggregation/?pages={{uri}}",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"webaggregation",
+												""
+											],
+											"query": [
+												{
+													"key": "pages",
+													"value": "{{uri}}",
+													"equals": true
+												}
+											]
+										},
+										"description": ""
+									},
+									"response": []
+								},
+								{
+									"name": "Aggregation Pages Param Fail-no Param",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "9ea2b642-163b-4c76-bfd5-a383ad40c396",
+												"type": "text/javascript",
+												"exec": [
+													"//SETUP",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"var layoutHelpers = eval(globals.layoutHelpers);",
+													"var response = pm.response;",
+													"var responseJson = response.json();",
+													"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+													"var responseBodySize = mainHelpers.stringSize(responseBody);",
+													"//TESTS",
+													"mainHelpers.verifyStatusCode(500);",
+													"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+													"//TEARDOWN",
+													"mainHelpers.unsetApiKey();",
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "54deef5d-c7ca-42be-980e-039f3385c690",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"EXECUTING: Aggregation Pages Param Fail-no Param\");",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"mainHelpers.setApiKey();"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "apikey",
+												"value": "{{apikey}}"
+											}
+										],
+										"body": {},
+										"url": {
+											"raw": "{{baseURL}}/webaggregation/",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"webaggregation",
+												""
+											]
+										},
+										"description": ""
+									},
+									"response": []
+								},
+								{
+									"name": "Aggregation Pages Param Fail-Invalid Param",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "133aef07-743e-44af-8a62-7bdb1adea7ba",
+												"type": "text/javascript",
+												"exec": [
+													"//SETUP",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"var layoutHelpers = eval(globals.layoutHelpers);",
+													"var response = pm.response;",
+													"var responseJson = response.json();",
+													"var responseheader = postman.getResponseHeader(\"Content-Length\");",
+													"var responseBodySize = mainHelpers.stringSize(responseBody);",
+													"//TESTS",
+													"mainHelpers.verifyStatusCode(500);",
+													"mainHelpers.compareValues(\"Content-Length Header Test\", responseheader, responseBodySize);",
+													"//TEARDOWN",
+													"mainHelpers.unsetApiKey();",
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "6cf5b80a-3daa-4dc7-859a-86f6a9b51154",
+												"type": "text/javascript",
+												"exec": [
+													"console.log(\"EXECUTING: Aggregation Pages Param Fail-Invalid Param\");",
+													"var mainHelpers = eval(globals.mainHelpers);",
+													"mainHelpers.setApiKey();"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "apikey",
+												"value": "{{apikey}}"
+											}
+										],
+										"body": {},
+										"url": {
+											"raw": "{{baseURL}}/webaggregation/?pages=/invalid/",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"webaggregation",
+												""
+											],
+											"query": [
+												{
+													"key": "pages",
+													"value": "/invalid/",
+													"equals": true
+												}
+											]
+										},
+										"description": ""
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "64ce6d81-3c19-4a71-b1b6-a4a31d3f6087",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(\"EXECUTING: Aggregation Pages with URI Parameter Sub-Folder\");"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "a8087677-6e76-4870-a026-a5d8029edeb6",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c1ea18f1-4d85-45e5-bb35-53692e020d69",
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"EXECUTING: Aggregation Pages Sub-Folder\");",
+									"",
+									"postman.setGlobalVariable(\"aggregationHelpers\", function aggregationHelpers() {",
+									"    let aggregationHelpers = {};",
+									"    ",
+									"    aggregationHelpers.aggregationPagesSchema = function aggregationPagesSchema() {",
+									"        const aggregationPagesSchema = ",
+									"        {",
+									"            \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"            \"type\": \"object\",",
+									"            \"required\": [",
+									"                \"uri\",",
+									"                \"site_id\",",
+									"                \"domain_name\",",
+									"                \"regions\"",
+									"            ],",
+									"            \"properties\": {",
+									"                \"uri\": {",
+									"                \"type\": \"string\"",
+									"                },",
+									"                \"layout_id\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"domain_name\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"site_id\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"layout_type\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"regions\": {",
+									"                    \"allOf\": [",
+									"                        { ",
+									"                            \"$ref\": \"#/definitions/regions\" ",
+									"                        }",
+									"                    ]",
+									"                }",
+									"            },",
+									"            \"definitions\": {",
+									"                \"Component\": {",
+									"                    \"type\": \"object\",",
+									"                    \"required\": [\"component\"],",
+									"                    \"properties\": {",
+									"                        \"component\": { ",
+									"                            \"type\": \"string\" ",
+									"                        },",
+									"                        \"key\": { ",
+									"                            \"type\": \"string\" ",
+									"                        },",
+									"                        \"config\": {     ",
+									"                            \"type\": \"object\"",
+									"                        }",
+									"                    } ",
+									"                },",
+									"                \"Components\": {",
+									"                    \"type\": \"array\",",
+									"                    \"items\": {",
+									"                        \"allOf\": [",
+									"                            {",
+									"                                \"$ref\": \"#/definitions/Component\" ",
+									"                            }",
+									"                        ]",
+									"                    }",
+									"                },",
+									"                \"regions\": {",
+									"                    \"type\": \"object\",",
+									"                    \"properties\": {",
+									"                        \"main\": {",
+									"                            \"allOf\": [",
+									"                                { ",
+									"                                    \"$ref\": \"#/definitions/Components\" ",
+									"                                    }",
+									"                            ]",
+									"                        },",
+									"                        \"right\": {",
+									"                            \"allOf\": [",
+									"                                { ",
+									"                                    \"$ref\": \"#/definitions/Components\" ",
+									"                                }",
+									"                            ]",
+									"                        }",
+									"                    }",
+									"                }",
+									"            }",
+									"        }",
+									"        pm.variables.set(\"aggregationPagesSchema\", aggregationPagesSchema);",
+									"    }",
+									"",
+									"",
+									"    return aggregationHelpers;",
+									"} + '; aggregationHelpers();');"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d16748-b6db-4fd5-8309-188299424bec",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "704e10e6-cd71-438e-b9a4-d94b2182847e",
+						"type": "text/javascript",
+						"exec": [
+							"console.log(\"EXECUTING: Aggregation APIs Folder\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "37cd11f8-61da-4740-8a46-c573085411fc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"exec": [
+					"console.log(\"EXECUTING: Chip APIs Suite\")",
+					"//SETTING UP URL",
+					"pm.variables.set(\"env\", \"dev\");",
+					"var env = pm.variables.get(\"env\");",
+					"if (env === \"dev\") {",
+					"    pm.variables.set(\"baseURL\", \"https://natgeo-preprod-dev.apigee.net\");",
+					"}else if (env === \"qa\") {",
+					"    pm.variables.set(\"baseURL\", \"https://natgeo-preprod-qa.apigee.net\");",
+					"}",
+					"",
+					"postman.setGlobalVariable(\"mainHelpers\", function mainHelpers() {",
+					"    let mainHelpers = {};",
+					" ",
+					"    mainHelpers.verifyStatusCode = function verifyStatusCode(statusCode) {",
+					"        console.log(\"executing response code test\");",
+					"        pm.test(\"Response Code Test: \"+statusCode, pm.response.to.have.status(statusCode));",
+					"    } ",
+					"",
+					"    mainHelpers.setApiKey = function setApiKey() {",
+					"        pm.variables.set(\"apikey\", \"4GV1yATH0BvJvEoKR3RuBjYRvmLdZ2D0\");",
+					"    }",
+					"    ",
+					"    mainHelpers.setIncorrectApiKey = function setIncorrectApiKey() {",
+					"        pm.variables.set(\"apikey\", \"4GV1yATH0BvJvEoKR3RuBjYRvmLdZ2jd\");",
+					"    }",
+					"    ",
+					"    mainHelpers.unsetApiKey = function unsetApiKey() {",
+					"        pm.variables.unset(\"apikey\")",
+					"",
+					"    }",
+					"    ",
+					"    mainHelpers.compareValues = function compareValues(message, value1, value2) {",
+					"        console.log(\"executing \"+message);",
+					"        pm.test(message, value1 === value2);",
+					"    }",
+					"    ",
+					"    mainHelpers.schemaValidationTest = function schemaValidationTest(response, responseJson, schema) {",
+					"        console.log(\"executing schema validation test for \"+response);",
+					"        tests[response+\" Schema Test\"] = tv4.validate(responseJson, schema);    ",
+					"    }",
+					"    ",
+					"    mainHelpers.stringSize = function stringSize(inputString) {",
+					"        var size=0;",
+					"        for (var count in inputString) {",
+					"            if(inputString.hasOwnProperty(count))",
+					"            size += 1;",
+					"        }       ",
+					"        return size;",
+					"    }",
+					"    ",
+					"    return mainHelpers;",
+					"} + '; mainHelpers();');",
+					"",
+					"",
+					""
+				],
+				"id": "eefd21c4-3ee3-44d0-978d-8433801f192f",
+				"type": "text/javascript"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"exec": [
+					""
+				],
+				"id": "4a4b6b35-e9e8-44f1-a69f-c6f1aa33e714",
+				"type": "text/javascript"
+			}
+		}
+	]
+}

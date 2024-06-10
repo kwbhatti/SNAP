@@ -1,0 +1,11 @@
+{
+    "uri": "/testing-for-automation-1",
+    "layoutType": "home",
+    "siteId": "NATGEO-TEST",
+    "domainName": "www.nationalgeographic.co.testing",
+    "publishState": "Draft",
+    "config":{},
+    "regions": {
+        "main": []
+    }
+}

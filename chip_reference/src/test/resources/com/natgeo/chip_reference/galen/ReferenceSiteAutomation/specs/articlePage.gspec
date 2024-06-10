@@ -1,0 +1,25 @@
+@objects
+    topAd          css .AdManager__ad_banner_box___2m1Ie
+    sideAd         css .AdManager__ad_article_box___12Wh_
+    socialBtns-*   css .Sharing__mt_sharing_btn___3kNZK
+    articleTitle   css .ArticleHeader__article_title___gCq2M
+    articleKicker  css .Kicker__wrapper___Qua6P
+    articleImage   css .Image__background_image_element___285OA
+    articleBody    css .ArticleBody__text___14m3l
+    imageDesc      css .Caption__caption___2gC6W
+
+
+=Ads=
+   topAd:
+       above articleKicker
+   sideAd:
+       right-of articleBody
+
+=Social Networks Component=
+    socialBtns-*:
+       right-of articleTitle
+        
+= articleImage =
+    articleImage:
+        below articleKicker
+       

@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  galen:
+    image: galenframework/cli
+    volumes:
+      - "./:/var/test_scripts"

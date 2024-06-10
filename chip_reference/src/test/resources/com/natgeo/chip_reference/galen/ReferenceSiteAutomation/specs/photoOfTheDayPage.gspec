@@ -1,0 +1,24 @@
+@objects
+    gallery       css        .ArticleGallery__gallery_wrapper___14LIy
+    galleyColumn  css        .ArticleGallery__gallery_main_column___1J9M3
+    sideAd        css        .AdManager__ad___2wpqW
+    image         css        .Image__background_image_element___285OA
+    imageDesc     css        .caption
+    imageCredit   css        .Caption__caption__photo-credit___15wYL
+#    upArrow
+    downArrow     css        .ArticleGallery__gallery_arrow___2lXw9
+
+= Ad=
+    sideAd:
+        inside gallery
+        right-of galleryColumn 
+=Photo= 
+    image:
+        inside gallery
+    imageDesc:
+        below image
+    imageCredit:
+        below imageDesc         
+=Nav Buttons=
+    downArrow:
+    left-of image

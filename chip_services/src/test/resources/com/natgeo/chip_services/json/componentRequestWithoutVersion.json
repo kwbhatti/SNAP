@@ -1,0 +1,8 @@
+{
+    "name": "test-component-000",
+    "schema": {
+        "content_mapper": {
+            "mapper1": "mapper1-value"
+        }
+    }
+}

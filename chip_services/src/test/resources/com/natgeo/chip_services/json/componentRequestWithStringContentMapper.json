@@ -1,0 +1,22 @@
+{
+   
+    "schema": {
+          "name": "string", 
+          "description": "string", 
+          "channel_type" : "string",
+          "version": "1.0.0",
+          "state": "published | beta | draft",
+          "content_mapper": "{this is a test component mapper}",
+          "data": {
+            "content" : {},
+            "config": {},
+             
+            "queries": [{
+                "source" : "string",
+                "params" : {},
+                "mapper" : "String",
+                "as" : "string"
+            }]
+          }
+        }
+}

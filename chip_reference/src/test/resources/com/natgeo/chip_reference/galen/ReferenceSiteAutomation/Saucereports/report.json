@@ -1,0 +1,18 @@
+{
+  "tests" : [ {
+    "name" : "SauceLabs test for homepage on Safari",
+    "startedAt" : 1519765778712,
+    "endedAt" : 1519765807678,
+    "failed" : true,
+    "statistic" : {
+      "passed" : 3,
+      "errors" : 1,
+      "warnings" : 0,
+      "total" : 4
+    },
+    "testId" : "1-saucelabs-test-for-homepage-on-safari",
+    "groups" : [ ],
+    "duration" : 28966,
+    "failed" : true
+  } ]
+}

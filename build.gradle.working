@@ -1,0 +1,277 @@
+import org.gradle.api.internal.tasks.options.Option
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+defaultTasks 'clean','aggregate'
+
+
+repositories {
+	mavenLocal()
+	jcenter()
+}
+
+
+buildscript {
+	repositories {
+		mavenLocal()
+		jcenter()
+		maven{url 'http://repository.jboss.org/maven2/'}
+	}
+	dependencies {
+		classpath "net.serenity-bdd:serenity-gradle-plugin:1.9.4",
+				'org.codehaus.gpars:gpars:1.2.1',
+				'net.saliman:gradle-properties-plugin:1.4.6'
+	}
+}
+
+
+import groovyx.gpars.GParsPool
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'net.serenity-bdd.aggregator'
+apply plugin: 'net.saliman.properties'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+dependencies {
+	compile 'org.slf4j:slf4j-api:1.7.7'
+	compile 'ch.qos.logback:logback-classic:1.2.3'
+	compile 'org.hamcrest:hamcrest-core:1.3'
+	compile 'org.hamcrest:hamcrest-library:1.3'
+	compile 'net.serenity-bdd:serenity-core:1.9.4'
+	compile "net.serenity-bdd:serenity-screenplay:1.9.4"
+	compile "net.serenity-bdd:serenity-cucumber:1.9.4"
+	compile 'junit:junit:4.12'
+	compile 'org.assertj:assertj-core:3.8.0'
+	compile 'com.saucelabs:saucerest:1.0.35'
+	compile 'com.applitools:eyes-selenium-java3:3.29'
+	compile "net.serenity-bdd:serenity-rest-assured:1.9.4"
+	compile "net.serenity-bdd:serenity-junit:1.9.4"
+	compile 'io.rest-assured:json-schema-validator:3.0.7'
+}
+
+
+ext {
+	numberOfParallelJobs = 10
+	SNAP_PROPERTY_LIST = [
+		"env",
+		"saucelabs.url",
+		"saucelabs.access.key",
+		"saucelabs.user.id",
+		"saucelabs.target.platform",
+		"snap.applitools.key",
+		"snap.applitools.url",
+		"snap.applitools.screensize",
+		"snap.applitools.matchlevel",
+		"CORE_ADMIN_USER",
+		"CORE_ADMIN_PWD",
+		"snap.core.admin.user",
+		"snap.core.admin.passwd",
+		"snap.parallel.number",
+		"snap.screensize"
+	]
+}
+
+ 
+
+def systemPropExist(propName) {
+	def rtnVal = false
+	if( System.getProperties().getAt(propName) != null ) {
+		rtnVal = true
+	}
+
+	return rtnVal
+}
+
+
+def processTagsWithFile(Matcher foundTagsInFile, String tagExpression) {
+	def rtnVal = true
+
+
+	//def tmpFileText = tmpFile.readLines()
+	//def foundTagsInFile = tmpFile.readLines() =~ /@[a-zA-Z0-9-_]+/
+
+	def tagExp = tagExpression.trim()
+	if(tagExp.length() == 0 ) {
+		tagExp = "not @pending"
+	}
+
+
+	//(?<=^|\(|\s)@[a-zA-Z0-9-_]*(?=\)|$|\s)
+	//((@[a-zA-Z0-9-_]+).*?(@[a-zA-Z0-9-_]+)).*
+	//(or|and|not).*?(@[a-zA-Z0-9-_]+)
+	
+//	if( !(tagExp =~ /\(/ || tagExp =~ /\)/ || tagExp =~ /(^|\s+)or($|\s+)/  
+//	if( !(tagExp =~ /\(/ || tagExp =~ /\)/ || tagExp =~ /(^|\s+)or($|\s+)/  ||
+//	tagExp =~ /(^|\s+)and($|\s+)/ || tagExp =~ /(^|\s+)not($|\s+)/) ) {
+//
+//		def foundTags = (tagExp =~ /(?<=^|\s+)@[a-zA-Z0-9-_]+(?=$|\s+)/)
+//		//println "foundTags ->" + foundTags.getCount()
+//		foundTags.each {tag ->
+//			//println "tag-->" + tag[0]
+//			if(tmpFileText =~ tag[0].trim() ) {
+//				rtnVal = true
+//			}
+//		}
+//	} else if( !(tagExp =~ /\(/ || tagExp =~ /\)/ || tagExp =~ /(^|\s+)and($|\s+)/  || tagExp =~ /(^|\s+)not($|\s+)/) && tagExp =~ /(^|\s+)or($|\s+)/   ) {
+//		def foundTags = (tagExp =~ /(^|\s+)@[a-zA-Z0-9-_]+($|\s+)/)
+//		
+//		foundTags.each {tag ->
+//			println "Here tag --> " + tag[0].trim()
+// 			if(tmpFileText =~ tag[0].trim() ) {
+//				rtnVal = true
+//			}
+//		}
+//	} else if( !(tagExp =~ /\(/ || tagExp =~ /\)/ || tagExp =~ /(^|\s+)or($|\s+)/  || tagExp =~ /(^|\s+)not($|\s+)/) &&  tagExp =~ /(^|\s+)and($|\s+)/   ) {
+//		def foundTags = (tagExp =~ /(^|\s+)@[a-zA-Z0-9-_]+($|\s+)/)		
+//		
+//		//Assume true and if not found set to false
+//		rtnVal = true
+//		foundTags.each {tag ->
+//			if( !(tmpFileText =~ tag[0].trim()) ) {
+//				rtnVal = false
+//			}
+//		}
+//	} else if( tagExp.equals("not @pending")) {
+//		if(  !(tmpFileText =~ /@pending/) ) {
+//			rtnVal = true
+//		}
+//	}
+
+
+	return rtnVal
+}
+
+
+
+def checkTagExpressionIsValid(String tagExp) {
+	def rtnVal = true
+	
+	def opening = tagExp =~ /\(/
+	def closing = tagExp =~ /\)/
+	if(!opening.size() == closing.size()) {
+		rtnVal = false
+	}
+		
+	return rtnVal
+}
+
+
+def runCucumberTests(testProperties, tagStr) {
+	def features = fileTree(dir: "${project.projectDir}/src/test/resources/com/natgeo/sites/").include '**/*.feature'
+
+	GParsPool.withPool(numberOfParallelJobs) {
+		features.eachParallel { File file ->
+
+			
+			def foundTagsInFile = file.readLines() =~ /@[a-zA-Z0-9-_]+/
+			if ( processTagsWithFile(foundTagsInFile,tagStr) ) {
+				try {
+					exec {
+						executable "sh"
+						args "-c", "mkdir -p ${project.projectDir}/target/cucumber " +
+								"&& java ${testProperties} " +
+								"-cp ${sourceSets.main.runtimeClasspath.asPath}:${sourceSets.main.output.asPath}:${sourceSets.test.output.asPath} " +
+								"net.serenitybdd.cucumber.cli.Main  " +
+								"--glue classpath:com.natgeo.sites " +
+								"${file.path} " +
+								"--plugin json:${project.projectDir}/target/cucumber/${file.name}.json " +
+								"--tags \"${tagStr}\" "
+					}
+				}  catch(Exception ex) {
+					//TODO
+				}
+			}
+		}
+	}
+}
+
+
+/**
+ *
+ *  Checks to make sure the required option is specfied 
+ *		Required Option(s): env
+ *
+ **/
+def checkRequiredOptions() {
+
+	SNAP_PROPERTY_LIST.each { propertyName ->
+		if( project.findProperty(propertyName) != null ) {
+			def tmpVal =  project.findProperty(propertyName)
+			throw new GradleException("This project does not accept property options like -P${propertyName}=${tmpVal}\nPlease use java options like -D${propertyName}=${tmpVal}")
+		}
+	}
+
+	if( !systemPropExist('env') ) {
+		throw new GradleException('Requires the -Denv option i.e -Denv=stagiong')
+	} else {
+		def propFile = "${project.projectDir}/src/test/resources/properties/" + System.getProperties().getAt("env") + ".properties"
+		if( !file(propFile).exists() ) {
+			throw new GradleException("The property file does not exist:\n"+ propFile)
+		}
+	}
+}
+
+
+task runInParallel () {
+	dependsOn assemble, compileTestJava
+
+	doFirst() { checkRequiredOptions() }
+
+
+
+	doLast(){
+		def testProperties = "-Dproperties=${project.projectDir}/src/test/resources/properties/${System.getProperties().getAt('env')}.properties"
+		SNAP_PROPERTY_LIST.each { propertyName ->
+			if( systemPropExist(propertyName)  && !propertyName.contains("snap.parallel.number") ) {
+				testProperties = testProperties + " -D${propertyName}=" + System.getProperties().getAt(propertyName)
+			} else if(systemPropExist("snap.parallel.number")) {
+				numberOfParallelJobs = System.getProperties().getAt("snap.parallel.number").toInteger()
+			}
+		}
+
+		def batchID = UUID.randomUUID().toString().toUpperCase()
+
+		println "@@@@@ -->  " + System.getProperties().getAt("tags")
+		runCucumberTests(testProperties,System.getProperties().getAt("tags") )
+	}
+}
+
+
+
+test ()  {
+	doFirst() {  checkRequiredOptions() }
+
+	
+
+	options {
+		//env should always exist
+		systemProperty 'properties', "${project.projectDir}/src/test/resources/properties/" + System.getProperties().getAt("env") + ".properties"
+		systemProperty "tags", System.getProperties().getAt("tags")
+
+		SNAP_PROPERTY_LIST.each { propertyName ->
+			if( systemPropExist(propertyName) ) {
+				systemProperty propertyName, System.getProperties().getAt(propertyName)
+			}
+		}
+	}
+
+	testLogging.showStandardStreams = true
+	systemProperties System.getProperties()
+}
+
+
+//class TagOption extends DefaultTask {
+//	@Option(option = "tags",
+//	description = "Cucumber tag expression",
+//	order = 1)
+//	Object tagExpression
+//}
+
+
+gradle.startParameter.continueOnFailure = true
+
+test.finalizedBy(aggregate)

@@ -1,0 +1,56 @@
+@objects
+    global-menu-container   css     .ng-global-navigation
+    contextual-nav          css     .ng-contextual-navigation
+    logo                    id      Layer_1 
+    firstArticle            css     .ContentPackage__cards_wrapper___3xgYa
+    promoCardText           css     .PromoCard__mt_promocard_nested_text___HxK1j
+    kicker                  css     .PromoCard__mt_promocard_pad___2KeKk
+    photo-of-the-day        css     .PhotoOfTheDay__gallery___3kwHb
+    footer                  css     .gf2_wrapper .gf2_content 
+
+    
+= Explore Global Menu =
+    global-menu-container:
+        @on desktop
+            width 1280px
+            height 44px
+        @on tablet
+            width 1024px
+            height 44px
+        @on mobile
+            width 400px
+            height 44px
+
+= Article Content Package=
+    firstArticle:
+        below contextual-nav
+    kicker:
+        above promoCardText
+    promoCardText:
+        inside firstArticle
+
+= Nav Bar =
+    contextual-nav:
+        @on desktop:
+            width: 1280px
+            height: 80px
+        @on tablet
+            width 1024px
+            height 80px
+        @on mobile
+            width 400px
+            height 70px
+    logo:
+        inside contextual-nav 
+
+= Photo of the Day =
+     photo-of-the-day:
+        @on desktop:
+            width: 1280px
+            height: 720px 
+
+
+= Footer =
+    footer:
+        below photo-of-the-day
+       

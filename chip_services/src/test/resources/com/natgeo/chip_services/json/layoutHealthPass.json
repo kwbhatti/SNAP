@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "required": ["message", "code", "type"],
+        "properties": {
+            "message": {
+            "type": "string"
+            },
+            "code": {
+            "type": "integer"
+            },
+            "type": {
+            "type": "string"
+            }
+        }
+    }
+}

@@ -1,0 +1,80 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "uri",
+        "site_id",
+        "domain_name",
+        "regions"
+    ],
+    "properties": {
+        "uri": {
+        "type": "string"
+        },
+        "layout_id": {
+            "type": "string"
+        },
+        "domain_name": {
+            "type": "string"
+        },
+        "site_id": {
+            "type": "string"
+        },
+        "layout_type": {
+            "type": "string"
+        },
+        "regions": {
+            "allOf": [
+                { 
+                    "$ref": "#/definitions/regions" 
+                }
+            ]
+        }
+    },
+    "definitions": {
+        "Component": {
+            "type": "object",
+            "required": ["component"],
+            "properties": {
+                "component": { 
+                    "type": "string" 
+                    },
+                    "key": { 
+                        "type": "string" 
+                    },
+                    "config": {     
+                        "type": "object"
+                    }
+                } 
+            },
+        "Components": {
+            "type": "array",
+            "items": {
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/Component" 
+                    }
+                ]
+            }
+        },
+        "regions": {
+            "type": "object",
+            "properties": {
+                "main": {
+                    "allOf": [
+                        { 
+                            "$ref": "#/definitions/Components" 
+                            }
+                    ]
+                },
+                "right": {
+                    "allOf": [
+                        { 
+                            "$ref": "#/definitions/Components" 
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

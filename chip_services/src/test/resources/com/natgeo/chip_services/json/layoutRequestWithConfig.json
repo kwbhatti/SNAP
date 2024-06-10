@@ -1,0 +1,41 @@
+{
+    "uri": "/my-test-uri-00000001",
+    "layoutType": "home",
+    "siteId": "NATGEO-UK",
+    "domainName": "www.nationalgeographic.co.uk",
+    "publishState": "Draft",
+    "config":{
+    	"configDynamicProperty": "config-dynamic-value-",
+    	"configStaticProperty": "config-static-value"
+    },
+    "regions": {
+        "main": [
+            {
+                "name": "DynamicPackage",
+                "version": "1.0.0",
+                "data": {
+            "queries": [
+                {
+                    "source": "distribution",
+                    "params": {
+                        "id": "gs:uk:dbc7b881-269a-4769-9157-8f177a278eb2,gs:uk:401c0526-ce98-48b8-93e1-0836b2303245,gs:uk:540a10e0-9d1a-4ef3-a6de-ab3425d9be19",
+                        "limit": "3",
+                        "fields": "content_type,id,kickers,lead_media,photo_galleries,title,uri",
+                        "language": "en-GB"
+                    },
+                    "mapper": "cards",
+                    "as": "cards"
+                }
+            ],
+            "config": {
+                "title": "Perpetual Planet",
+                "theme": "dark",
+                "cardsConfig": {
+                    "cardAspectRatio": "16:9"
+                }
+            },
+            "timestamp": 1525891625157
+        }            }
+        ]
+    }
+}

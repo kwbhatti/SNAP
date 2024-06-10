@@ -1,0 +1,126 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "name": {
+        "type": "string"
+        },
+        "nameSpace": {
+            "type": "string"
+        },
+        "domain": {
+            "type": "string"
+        },
+        "language": {
+            "type": "string"
+        },
+        "country": {
+            "type": "string"
+        },
+        "channelType": {
+            "type": "string"
+        },
+        "contentAPIURL": {
+            "type": "string"
+        },
+        "layoutURL": {
+            "type": "string"
+        },
+        "auth": {
+            "type": "string"
+        },
+        "video": {
+            "type": "object",
+            "properties": {
+                "MPX": {
+                    "type": "object",
+                    "properties": {
+                        "accounts": {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/definitions/MPXAccount"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "social": {
+            "type": "array",
+            "items": {
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/Social"
+                    }
+                ]
+            }
+        },
+        "ads": {
+            "type": "array",
+            "items": {
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/Ad"
+                    }
+                ]
+            }
+        },
+        "analytics": {
+            "type": "array",
+            "items": {
+                "allOf": [
+                    {
+                        "$ref": "#/definitions/Analytics"
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "Social": {
+            "type": "object",
+            "properties": {
+                "name": { 
+                    "type": "string" 
+                    },
+                "uri": { 
+                        "type": "string" 
+                    },
+                "key": {     
+                        "type": "string"
+                    }
+                } 
+            },
+        "Ad": {
+            "type": "object",
+            "properties": {
+                "name": { 
+                    "type": "string" 
+                    }
+                } 
+        },
+        "Analytics": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "MPXAccount": {
+            "type": "object",
+            "properties": {
+                "name":{
+                    "type": "string"
+                },
+                "account": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

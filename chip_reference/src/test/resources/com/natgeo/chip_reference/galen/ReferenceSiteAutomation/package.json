@@ -1,0 +1,16 @@
+{
+  "name": "referencesiteautomation",
+  "version": "1.0.0",
+  "description": "Galen Automated Tests for National Geographic CHIP Reference Site",
+  "dependencies": {
+    "@types/npm": "2.0.29",
+    "@types/selenium-webdriver": "3.0.8",
+    "dotenv": "5.0.1",
+    "galen-cli": "^1.0.1",
+    "galenframework": "2.3.5"
+  },
+  "scripts": {
+    "test": "./run.sh"
+  },
+  "author": "Daniel Alvarez del Castillo Martinez"
+}

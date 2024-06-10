@@ -1,0 +1,7 @@
+#Header Key=Value;CheckType;Name
+v2=natgeo:web:home;equal;page_name
+v15=home;equal;page_type
+v6=natgeo:web:home;equal;contentLevel1
+v7=natgeo:web:home;equal;contentLevel2
+v8=natgeo:web:home;equal;contentLevel3
+v9=natgeo:web:home;equal;contentLevel4

@@ -1,0 +1,16 @@
+To run the project follow the steps below:
+
+1. Install Galen Framework (http://galenframework.com/docs/getting-started-install-galen/)
+
+2. Go to the root of the project.
+
+3. To run only a test specification use the following command:
+
+    galen check home-page.gspec --url "http://chip.us-east-1.awsdev-test.ngeo.com/" --size "1280x800" --include "desktop" --htmlreport "reports"
+
+4. To run the entire test suite use the following command:
+
+    galen test home-page.test --htmlreport "reports" 
+
+More info about running tests with Galen Framework can be found here:
+    http://galenframework.com/docs/reference-working-in-command-line/

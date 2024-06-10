@@ -1,0 +1,9 @@
+dependencies { 
+	compile project(':common')
+}
+
+runInParallel {
+	doFirst(){
+		ext.projectName = project.name
+	}
+}
